@@ -51,4 +51,27 @@ test_table<-function(atable,digits=3,ignore_paren=TRUE){
   pvalue<-fisher.test(atable[nonparen_idx,])$p.value
   ifelse(pvalue<0.001,"<.001",num_to_str(pvalue,digits=digits))
 }
+
+summarize_percent<-function(x1,x2,true_val=TRUE,missing=TRUE,digits=2){
+  x1<-x1==true_val
+  x2<-x2==true_val
+  if(missing){
+    rbind(c(paste0(sum(x1,na.rm=T)," (",num_to_str(100*sum(x1,na.rm=TRUE)/sum(!is.na(x1))),"%",")"),
+            paste0(sum(x2,na.rm=T)," (",num_to_str(100*sum(x2,na.rm=TRUE)/sum(!is.na(x2))),"%",")")),
+          c(paste0("(Missing: ",sum(is.na(x1)),")"),
+            paste0("(Missing: ",sum(is.na(x2)),")")))
+  }else{
+    c(paste0(sum(x1)," (",num_to_str(100*sum(x1,na.rm=TRUE)/sum(!is.na(x1))),"%",")"),
+      paste0(sum(x2)," (",num_to_str(100*sum(x2,na.rm=TRUE)/sum(!is.na(x2))),"%",")"))
+  }
+}
+
+test_percent<-function(x1,x2,true_val=TRUE,digits=3){
+  x1<-x1==true_val
+  x2<-x2==true_val
+  pvalue<-prop.test(x=c(sum(x1,na.rm=TRUE),sum(x2,na.rm=TRUE)),
+                    n=c(sum(!is.na(x1)),sum(!is.na(x2))))$p.value
+  ifelse(pvalue<0.001,"<.001",num_to_str(pvalue,digits=digits))
+}
+
 ```
