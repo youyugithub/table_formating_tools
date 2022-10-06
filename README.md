@@ -1,5 +1,7 @@
 # Table Formating Tools
 
+## two group version
+
 ```
 num_to_str<-function(x,digits=2)sprintf(paste0("%.",digits,"f"),x)
 
