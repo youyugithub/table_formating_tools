@@ -77,3 +77,44 @@ test_percent<-function(x1,x2,true_val=TRUE,digits=3){
 }
 
 ```
+## Single group version
+```
+num_to_str<-function(x,digits=1)sprintf(paste0("%.",digits,"f"),x)
+
+summarize_table<-function(atable,digits=2,ignore_paren=TRUE){
+  paren_idx<-substr(row.names(atable),1,1)=="("
+  nonparen_idx<-!paren_idx
+  if(!ignore_paren|all(nonparen_idx)){
+    cbind(paste0("  ",row.names(atable)),
+          paste0(atable," (",num_to_str(100*atable/sum(atable),digits=2),"%)"))
+  }else{
+    rbind(cbind(paste0("  ",row.names(atable)[nonparen_idx]),
+                paste0(atable[nonparen_idx]," (",num_to_str(100*atable[nonparen_idx]/sum(atable[nonparen_idx]),digits=2),"%)")),
+          cbind(paste0("  ",row.names(atable)[paren_idx]),
+                paste0(atable[paren_idx])))
+  }
+}
+
+summarize_percent<-function(x,true_val=TRUE,missing=any(is.na(x)),digits=2){
+  x<-x==true_val
+  if(missing){
+    rbind(paste0(sum(x,na.rm=T)," (",num_to_str(100*sum(x,na.rm=TRUE)/sum(!is.na(x))),"%",")"),
+          paste0("(Missing: ",sum(is.na(x)),")"))
+  }else{
+    paste0(sum(x)," (",num_to_str(100*sum(x,na.rm=TRUE)/sum(!is.na(x))),"%",")")
+  }
+}
+
+summarize_median<-function(x,digits=2,missing=any(is.na(x))){
+  if(missing){
+    rbind(paste0(num_to_str(median(x,na.rm=T),digits=digits)," (",
+                 num_to_str(quantile(x,na.rm=T,0.25),digits=digits),"-",
+                 num_to_str(quantile(x,na.rm=T,0.75),digits=digits),")"),
+          paste0("(Missing: ",sum(is.na(x)),")"))
+  }else{
+    rbind(paste0(num_to_str(median(x,na.rm=T),digits=digits)," (",
+                 num_to_str(quantile(x,na.rm=T,0.25),digits=digits),"-",
+                 num_to_str(quantile(x,na.rm=T,0.75),digits=digits),")"))
+  }
+}
+```
