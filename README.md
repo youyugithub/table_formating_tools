@@ -198,3 +198,32 @@ summarize_median<-function(...,missing=NULL,digits=1){
   return(a_mat)
 }
 ```
+## fill
+```
+cbind.fill<-function(...,fill=""){
+  nm <- list(...) 
+  nm<-lapply(nm, as.matrix)
+  n <- max(sapply(nm, nrow)) 
+  do.call(cbind, lapply(nm, function (x) 
+    rbind(x, matrix(fill, n-nrow(x), ncol(x))))) 
+}
+cbind.fill(matrix(1:4,2,2),matrix(1:9,3,3))
+cbind.fill(1:4,2:3)
+
+rbind.fill<-function(...,fill=""){
+  nm<-list(...)
+  fn<- function(x){
+    if(is.vector(x)){
+      t(x)
+    }else{
+      as.matrix(x)
+    }
+  }
+  nm<-lapply(nm,fn)
+  n <- max(sapply(nm, ncol)) 
+  do.call(rbind, lapply(nm, function (x) 
+    cbind(x, matrix(fill, nrow(x), n-ncol(x))))) 
+}
+rbind.fill(matrix(1:4,2,2),matrix(1:9,3,3))
+rbind.fill(c(1,2,3),c(1,2))
+```
