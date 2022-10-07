@@ -159,13 +159,14 @@ summarize_percent<-function(...,true_val=TRUE,missing=NULL,digits=1){
   a_mat<-c()
   if(is.null(missing))missing<-any(is.na(unlist(a_list)))
   for(idx in 1:length(a_list)){
+    a_val<-a_list[[idx]]==true_val
     if(missing){
       a_col<-rbind(
-        paste0(sum(a_list[[idx]],na.rm=T)," (",num_to_str(100*sum(a_list[[idx]],na.rm=TRUE)/sum(!is.na(a_list[[idx]]))),"%",")"),
+        paste0(sum(a_val,na.rm=T)," (",num_to_str(100*sum(a_val,na.rm=TRUE)/sum(!is.na(a_val))),"%",")"),
         paste0("(Missing: ",sum(is.na(a_list[[idx]])),")"))
       a_mat<-cbind(a_mat,a_col)
     }else{
-      a_col<-paste0(sum(a_list[[idx]])," (",num_to_str(100*sum(a_list[[idx]],na.rm=TRUE)/sum(!is.na(a_list[[idx]]))),"%",")")
+      a_col<-paste0(sum(a_val)," (",num_to_str(100*sum(a_val,na.rm=TRUE)/sum(!is.na(a_val))),"%",")")
       a_mat<-cbind(a_mat,a_col)
     }
   }
