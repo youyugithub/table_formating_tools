@@ -5,6 +5,19 @@
 ```
 num_to_str<-function(x,digits=2)sprintf(paste0("%.",digits,"f"),x)
 
+num_to_pvalue<-function(x,digits=3){
+  ifelse(x<0.001,"<.001",sprintf(paste0("%.",digits,"f"),x))
+}
+
+num_to_star<-function(x,digits=3){
+  dplyr::case_when(
+    x<=0.001~"***",
+    x<=0.01~"**",
+    x<=0.05~"*",
+    x<=0.1~"·",
+    TRUE~"")
+}
+
 summarize_median<-function(x1,x2,digits=2){
   c(paste0(num_to_str(median(x1,na.rm=T),digits=digits)," (",
            num_to_str(quantile(x1,na.rm=T,0.25),digits=digits),"-",
