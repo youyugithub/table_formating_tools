@@ -241,3 +241,22 @@ rbind.fill<-function(...,fill=""){
 rbind.fill(matrix(1:4,2,2),matrix(1:9,3,3))
 rbind.fill(c(1,2,3),c(1,2))
 ```
+
+# format numbers
+```
+num_to_str_g<-function(x,digits=4)sprintf(paste0("%.",digits,"g"),x)
+num_to_str_f<-function(x,digits=2)sprintf(paste0("%.",digits,"f"),x)
+num_to_str_s<- function(x,digits=2)gsub("\\.$", "",formatC(signif(x,digits=digits),digits=digits,format="fg",flag="#"))
+
+num_to_str_LY<-function(x,digit_l=6,digit_m=3,digit_s=6){
+  case_when(
+    abs(x)>=10^digit_l&abs(x)>=1e9~paste0(formatC(signif(x/1e9,digits=digit_m),digits=digit_m,format="fg",flag="#"),"B"),
+    abs(x)>=10^digit_l&abs(x)>=1e6~paste0(formatC(signif(x/1e6,digits=digit_m),digits=digit_m,format="fg",flag="#"),"M"),
+    abs(x)>=10^digit_l&abs(x)>=1e3~paste0(formatC(signif(x/1e3,digits=digit_m),digits=digit_m,format="fg",flag="#"),"K"),
+    abs(x)>=10^(digit_m-1)~as.character(as.integer(x)),
+    abs(x)>=10^(-digit_s+digit_m)~formatC(signif(x,digits=digit_m),digits=digit_m,format="fg",flag="#"),
+    x==0~sprintf(paste0("%.",digit_m,"f"),x),
+    TRUE~sprintf(paste0("%.",digit_s,"f"),x))
+}
+
+```
