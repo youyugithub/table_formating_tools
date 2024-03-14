@@ -211,6 +211,29 @@ summarize_median<-function(...,missing=NULL,digits=1){
   colnames(a_mat)<-NULL
   return(a_mat)
 }
+
+summarize_meansd<-function(...,missing=NULL,digits=1){
+  a_list<-list(...)
+  a_mat<-c()
+  if(is.null(missing))missing<-any(is.na(unlist(a_list)))
+  for(idx in 1:length(a_list)){
+    a_val<-a_list[[idx]]
+    if(missing){
+      a_col<-rbind(
+        paste0(num_to_str(mean(a_val,na.rm=T),digits=digits)," (",
+               num_to_str(sd(a_val,na.rm=T),digits=digits),")"),
+        paste0("(Missing: ",sum(is.na(a_val)),")"))
+      a_mat<-cbind(a_mat,a_col)
+    }else{
+      a_col<-rbind(
+        paste0(num_to_str(mean(a_val,na.rm=T),digits=digits)," (",
+               num_to_str(sd(a_val,na.rm=T),digits=digits),")"))
+      a_mat<-cbind(a_mat,a_col)
+    }
+  }
+  colnames(a_mat)<-NULL
+  return(a_mat)
+}
 ```
 ## fill
 ```
